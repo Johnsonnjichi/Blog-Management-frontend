@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Management</title>
+    <!-- <link rel="stylesheet" href="styles.css"> -->
+    <link rel="stylesheet" href="./index.css"
+</head>
+<body>
+    <header>
+        <h1>Blog Management</h1>
+        <p id="auth-links">
+            <a href="login.html" id="login-link">Login</a> | 
+            <a href="signup.html" id="signup-link">Sign Up</a> 
+        </p>
+        <p id="user-info" style="display:none;">
+            Welcome, <span id="username"></span> | 
+            <a href="javascript:void(0)" id="logout-btn">Logout</a>
+        </p>
+    </header>
+
+    <section id="posts">
+        <h2>All Blog Posts</h2>
+        <div id="post-list"></div>
+    </section>
+
+    <section id="create-post" style="display:none;">
+        <h2>Create a New Post</h2>
+        <form id="post-form">
+            <input type="text" name="title" id="title" placeholder="Post Title" required>
+            <textarea name="content" id="content" rows="5" placeholder="Post Content" required></textarea>
+            <button type="submit">Create Post</button>
+        </form>
+    </section>
+
+    <!-- <script src="scripts.js"></script> -->
+    <script src="./index.js"></script>
+</body>
+</html>
