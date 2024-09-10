@@ -36,7 +36,7 @@ function createPost(event) {
     const title = document.getElementById('post-title').value;
     const content = document.getElementById('post-content').value;
 
-    fetch(`${API_BASE_URL}/blog/create/`, {
+    fetch(`${API_BASE_URL}/blog/create_blog/`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
