@@ -23,6 +23,7 @@
     </form>
 
     <script>
+        const API_BASE_URL = 'http://localhost:8000'
         const signupForm = document.getElementById('signup-form');
 
         signupForm.addEventListener('submit', function(event) {
@@ -32,7 +33,7 @@
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
-            fetch(`${API_BASE_URL}/auth/signup/`, {
+            fetch(`${API_BASE_URL}/blog/signup/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -45,13 +46,15 @@
             })
             .then(response => response.json())
             .then(data => {
-                if (data.token) {
+                if (data.message) {
+                    // alert(data.message)
                     // Store the auth token in localStorage
-                    localStorage.setItem('authToken', data.token);
-                    alert('Sign up successful! You are now logged in.');
-                    window.location.href = '/index.html';  // Redirect after successful sign-up
+                    // localStorage.setItem('accessToken', data.access);
+                    // localStorage.setItem('refreshToken', data.refresh)
+                    alert('Sign up successful!');
+                    window.location.href = './login.html';  // Redirect after successful sign-up
                 } else {
-                    alert('Sign up failed. Please try again.');
+                    alert('Sign up failed. Please try again.', data.error);
                 }
             })
             .catch(error => console.log('Error signing up:', error));
