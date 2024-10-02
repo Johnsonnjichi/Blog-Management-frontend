@@ -1,17 +1,18 @@
-const API_BASE_URL = 'http://localhost:8000';  // Adjust to your API base URL
+const API_BASE_URL = 'http://localhost:8000';  
 const postList = document.getElementById('post-list');
 const postForm = document.getElementById('post-form');
-const authToken = localStorage.getItem('authToken');  // Get the auth token from localStorage
+const authToken = localStorage.getItem('authToken');  
 
 // Function to check if the user is authenticated
+// Check if the auth token exists
 function isAuthenticated() {
-    return authToken !== null;  // Check if the auth token exists
+    return authToken !== null;  
 }
 
 // Function to show or hide elements based on authentication
 function toggleAuthElements() {
     const authElements = document.querySelectorAll('.auth-element');
-    const postFormElement = document.getElementById('post-form');
+    const postFormElement = document.getElementById('create-post');
     
     // Show or hide elements based on authentication status
     if (isAuthenticated()) {
@@ -29,6 +30,11 @@ function toggleAuthElements() {
         
    }, 3000000);
 
+// Function to format date in a more user-friendly way
+function formatDate(dateString) {
+    const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true };
+    return new Date(dateString).toLocaleDateString('en-US', options);
+}
 
 // Function to load posts from the API
 function loadPosts() {
@@ -39,20 +45,23 @@ function loadPosts() {
             posts.forEach(post => {
                 const postDiv = document.createElement('div');
                 postDiv.classList.add('post');
+
+                console.log(post);
                 
                 // Create post content
                 postDiv.innerHTML = `
                     <h3>${post.title}</h3>
                     <p>${post.content}</p>
-                    <p>Author: ${post.author}</p>
+                    <p>Author: ${post.author_name}</p>
                     <p>Posted on: ${post.created_at}</p>
+                    
                 `;
                 
                 // Add buttons conditionally
                 if (isAuthenticated()) {
                     postDiv.innerHTML += `
 
-                    <button onclick="editPost(${post.id},${post.author})">Edit</button>
+                    <button onclick="editPost(${post.id},'${post.author}')">Edit</button>
                     <button onclick="deletePost(${post.id})">Delete</button>
 
                     `;
@@ -71,7 +80,7 @@ function createPost(event) {
     const title = document.getElementById('post-title').value;
     const content = document.getElementById('post-content').value;
 
-    fetch(`${API_BASE_URL}/blog/create_blog/`, {
+    fetch(`${API_BASE_URL}/blog/post`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -79,7 +88,8 @@ function createPost(event) {
         },
         body: JSON.stringify({
             title: title,
-            content: content
+            content: content,
+        
 
         })
     })
@@ -93,6 +103,7 @@ function createPost(event) {
     .then(data => {
         console.log('Post created:', data);
         loadPosts();  // Reload posts after successful creation
+        postForm.reset()
     })
     .catch(error => console.log('Error creating post:', error));
 }
@@ -123,11 +134,14 @@ async function editPost(postId, author) {
     }
 }
 
-
+    
 
 
 // Initial setup
 document.addEventListener('DOMContentLoaded', function() {
     toggleAuthElements();  // Show or hide elements based on authentication status
     loadPosts();  // Load posts when the page is loaded
+
+    postForm.addEventListener('submit', createPost)
 });
+
