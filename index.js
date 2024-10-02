@@ -1,12 +1,11 @@
-const API_BASE_URL = 'http://localhost:8000';  
+const API_BASE_URL = 'http://localhost:8000';  // Adjust to your API base URL
 const postList = document.getElementById('post-list');
 const postForm = document.getElementById('post-form');
-const authToken = localStorage.getItem('authToken');  
+const authToken = localStorage.getItem('authToken');  // Get the auth token from localStorage
 
 // Function to check if the user is authenticated
-// Check if the auth token exists
 function isAuthenticated() {
-    return authToken !== null;  
+    return authToken !== null;  // Check if the auth token exists
 }
 
 // Function to show or hide elements based on authentication
@@ -134,13 +133,35 @@ async function editPost(postId, author) {
     }
 }
 
+async function deletePost(postId) {
+    if (!confirm("Are you sure you want to delete this post?")) return;
+    
+    const res = await fetch(`${API_BASE_URL}/blog/delete/${postId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+        }
+    });
+
+
+    // Check for successful deletion
+    if (res.ok) {
+        alert('Post deleted successfully')
+        console.log('Post deleted successfully');
+        loadPosts(); 
+    } else {
+        alert('Failed to delete post.');
+    }
+}
     
 
 
 // Initial setup
+// Show or hide elements based on authentication status
 document.addEventListener('DOMContentLoaded', function() {
-    toggleAuthElements();  // Show or hide elements based on authentication status
-    loadPosts();  // Load posts when the page is loaded
+    toggleAuthElements();  
+    loadPosts();  
 
     postForm.addEventListener('submit', createPost)
 });
