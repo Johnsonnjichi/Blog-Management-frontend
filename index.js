@@ -1,11 +1,12 @@
-const API_BASE_URL = 'http://localhost:8000';  // Adjust to your API base URL
+const API_BASE_URL = 'http://localhost:8000';  
 const postList = document.getElementById('post-list');
 const postForm = document.getElementById('post-form');
-const authToken = localStorage.getItem('authToken');  // Get the auth token from localStorage
+const authToken = localStorage.getItem('authToken'); 
 
 // Function to check if the user is authenticated
+// Check if the auth token exists
 function isAuthenticated() {
-    return authToken !== null;  // Check if the auth token exists
+    return authToken !== null;  
 }
 
 // Function to show or hide elements based on authentication
@@ -22,7 +23,7 @@ function toggleAuthElements() {
         if (postFormElement) postFormElement.style.display = 'none';  // Hide post form if not authenticated
     }
 }
-
+// Function to expire the autToken 
     setTimeout(()=>{
         localStorage.removeItem('authToken');
         window.location.reload()
@@ -35,7 +36,7 @@ function formatDate(dateString) {
     return new Date(dateString).toLocaleDateString('en-US', options);
 }
 
-// Function to load posts from the API
+// Function to load posts from the API(READ MTHD)
 function loadPosts() {
     fetch(`${API_BASE_URL}/blog/`)
         .then(response => response.json())
@@ -74,7 +75,7 @@ function loadPosts() {
 
 // Function to handle form submission for creating a new post
 function createPost(event) {
-    if (event) event.preventDefault();  // Prevent form from submitting the traditional way
+    if (event) event.preventDefault();  
 
     const title = document.getElementById('post-title').value;
     const content = document.getElementById('post-content').value;
@@ -83,7 +84,7 @@ function createPost(event) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${authToken}`  // Include token if user is authenticated
+            'Authorization': `Bearer ${authToken}`
         },
         body: JSON.stringify({
             title: title,
@@ -101,7 +102,7 @@ function createPost(event) {
     })
     .then(data => {
         console.log('Post created:', data);
-        loadPosts();  // Reload posts after successful creation
+        loadPosts();  
         postForm.reset()
     })
     .catch(error => console.log('Error creating post:', error));
@@ -116,7 +117,7 @@ async function editPost(postId, author) {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${authToken}`  // Include token if user is authenticated
+            'Authorization': `Bearer ${authToken}`  
         },
         body: JSON.stringify({
             title: title,
@@ -127,12 +128,12 @@ async function editPost(postId, author) {
 
     if (res.ok) {
         console.log('Post updated successfully');
-        loadPosts(); // Reload posts after a successful update
+        loadPosts(); 
     } else {
         alert('Failed to update post.');
     }
 }
-
+// Function to delete a post
 async function deletePost(postId) {
     if (!confirm("Are you sure you want to delete this post?")) return;
     
